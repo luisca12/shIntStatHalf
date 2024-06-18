@@ -6,7 +6,7 @@ import traceback
 shIntStatusHalf = "show interface status | include half"
 shHostname = "show run | i hostname"
 
-def showBGPSum(validIPs, username, netDevice):
+def showHalfInts(validIPs, username, netDevice):
     # This function is to take a show run
     
     for validDeviceIP in validIPs:
@@ -34,18 +34,18 @@ def showBGPSum(validIPs, username, netDevice):
                 shHostnameOut = shHostnameOut.strip()
                 shHostnameOut = shHostnameOut + "#"
 
-            print(f"INFO: Taking a \"{shIntStatusHalf}\" for device: {validDeviceIP}")
-            shIntStatusHalfOut = sshAccess.send_command(shIntStatusHalf)
-            authLog.info(f"Automation successfully ran the command: {shIntStatusHalf}")
-            if "half" in shIntStatusHalfOut:
-                print(f"INFO: The word \"half\" was found on the output for device: {validDeviceIP}")
-                authLog.info(f"The word \"half\" was found on the output for device: {validDeviceIP}")
-                authLog.info(f"{shHostnameOut}{shIntStatusHalf}\n{shIntStatusHalfOut}")
-                with open(f"Outputs/{validDeviceIP}_Output.txt", "a") as file:
-                    file.write(f"User {username} connected to device IP {validDeviceIP}\n\n")
-                    file.write(f"{shHostnameOut}{shIntStatusHalf}\n{shIntStatusHalfOut}")
-            else:
-                authLog.info(f"Device {validDeviceIP} is running at full duplex/full speed")
+                print(f"INFO: Taking a \"{shIntStatusHalf}\" for device: {validDeviceIP}")
+                shIntStatusHalfOut = sshAccess.send_command(shIntStatusHalf)
+                authLog.info(f"Automation successfully ran the command: {shIntStatusHalf}")
+                if "half" in shIntStatusHalfOut:
+                    print(f"INFO: The word \"half\" was found on the output for device: {validDeviceIP}")
+                    authLog.info(f"The word \"half\" was found on the output for device: {validDeviceIP}")
+                    authLog.info(f"{shHostnameOut}{shIntStatusHalf}\n{shIntStatusHalfOut}")
+                    with open(f"Outputs/{validDeviceIP}_Output.txt", "a") as file:
+                        file.write(f"User {username} connected to device IP {validDeviceIP}\n\n")
+                        file.write(f"{shHostnameOut}{shIntStatusHalf}\n{shIntStatusHalfOut}")
+                else:
+                    authLog.info(f"Device {validDeviceIP} is running at full duplex/full speed")
 
         except Exception as error:
             print(f"An error occurred: {error}\n", traceback.format_exc())
